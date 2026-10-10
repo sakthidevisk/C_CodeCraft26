@@ -1,0 +1,92 @@
+
+#include <stdio.h>
+
+struct Complaint
+{
+    int id;
+    char name[50];
+    char category[30];
+    char description[100];
+    int priority;
+    char status[30];
+};
+
+int main()
+{
+    struct Complaint c[100], temp;
+    int n, pending = 0, resolved = 0, progress = 0;
+
+    printf("Enter number of complaints: ");
+    scanf("%d", &n);
+
+    if (n < 1 || n > 100)
+    {
+        printf("Invalid number of complaints!\n");
+        return 0;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("\nComplaint %d\n", i + 1);
+
+        printf("Complaint ID: ");
+        scanf("%d", &c[i].id);
+
+        printf("Name: ");
+        scanf(" %49[^\n]", c[i].name);
+
+        printf("Category (Lab/Hostel/Network/etc.): ");
+        scanf(" %29[^\n]", c[i].category);
+
+        printf("Description: ");
+        scanf(" %99[^\n]", c[i].description);
+
+        printf("Priority (1-Low, 2-Medium, 3-High, 4-Critical): ");
+        scanf("%d", &c[i].priority);
+
+        printf("Status (Pending/InProgress/Resolved): ");
+        scanf(" %29[^\n]", c[i].status);
+    }
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (c[j].priority < c[j + 1].priority)
+            {
+                temp = c[j];
+                c[j] = c[j + 1];
+                c[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\n--- PRIORITIZED COMPLAINTS ---\n");
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("\nID: %d\n", c[i].id);
+        printf("Name: %s\n", c[i].name);
+        printf("Category: %s\n", c[i].category);
+        printf("Description: %s\n", c[i].description);
+        printf("Priority: %d\n", c[i].priority);
+        printf("Status: %s\n", c[i].status);
+
+        
+        
+        if (c[i].status[0] == 'P' || c[i].status[0] == 'p')
+            pending++;
+        else if (c[i].status[0] == 'R' || c[i].status[0] == 'r')
+            resolved++;
+        else if (c[i].status[0] == 'I' || c[i].status[0] == 'i')
+            progress++;
+    }
+
+    printf("\n--- COMPLAINT SUMMARY ---\n");
+    printf("Total complaints: %d\n", n);
+    printf("Pending: %d\n", pending);
+    printf("In Progress: %d\n", progress);
+    printf("Resolved: %d\n", resolved);
+
+    return 0;
+}
